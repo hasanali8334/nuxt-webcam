@@ -17,6 +17,12 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+
+    '@uppy/core/dist/style.css',
+
+    '@uppy/dashboard/dist/style.css',
+
+    '@uppy/webcam/dist/style.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
