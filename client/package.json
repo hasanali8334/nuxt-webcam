@@ -15,7 +15,8 @@
     "@uppy/webcam": "^1.8.11",
     "@uppy/xhr-upload": "^1.7.4",
     "core-js": "^3.9.1",
-    "nuxt": "^2.15.3"
+    "nuxt": "^2.15.3",
+    "recordrtc": "^5.6.2"
   },
   "devDependencies": {}
 }
