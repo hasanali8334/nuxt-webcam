@@ -37,4 +37,3 @@ export default {
   }
 }
 </script>
-© 2021 GitHub, Inc.

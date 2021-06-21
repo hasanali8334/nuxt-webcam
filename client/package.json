@@ -12,6 +12,7 @@
     "@nuxtjs/axios": "^5.13.1",
     "@uppy/core": "^1.19.1",
     "@uppy/dashboard": "^1.20.1",
+    "@uppy/vue": "^0.2.4",
     "@uppy/webcam": "^1.8.11",
     "@uppy/xhr-upload": "^1.7.4",
     "core-js": "^3.9.1",
