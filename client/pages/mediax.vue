@@ -13,14 +13,20 @@
 </template>
 <script>
 import RecordRTC from 'recordrtc'
+import Uppy from '@uppy/core'
+import XHRUpload from '@uppy/xhr-upload'
 //let mediadev;
 let recorder;
 let stream;
 let video;
 let media;
+let blob
 
 
 export default {
+    data(){
+        blobdata:'';
+    },
     
 
 
@@ -67,13 +73,35 @@ export default {
             console.log('stopRecord')
             
             recorder.stopRecording(function() {
-        let blob = recorder.getBlob();
-        console.log(blob);
+       this.blobdata = recorder.getBlob();
+        console.log(this.blobdata);
         video.pause();
-        MediaStreamTrack.stop()
+        stream.getTracks().forEach(track => track.stop())
+        let file=new File([this.blobdata], 'record.webm');
+
+        const data = {"user" : "test",};
+
+        const formData = new FormData();
+        formData.append('files.file', file);
+        formData.append('data', JSON.stringify(data));
+        
+         this.$axios.$post({
+            method: "post",
+            url: "http://localhost:5000/recordings",
+            data: formData,
+            headers: {
+            "content-type": `multipart/form-data;`
+            }
+        })
+                
+        
+        
     });
 
         }
+
+        
+    
     }
 
 }
