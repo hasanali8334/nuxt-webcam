@@ -1,39 +1,73 @@
 <template>
-  <v-layout column justify-center align-center>
-    <v-flex xs12 sm8 md6>
-      <center>
-        <h1>Nuxt.js + uppy example</h1>
-        <v-btn id="select-files" color="primary">upload</v-btn>
-      </center>
-    </v-flex>
-  </v-layout>
-</template>
+     <div >
+    
+      <button @click="startrecord()">Start Record</button>
+      <button @click="stoprecord()">Stop Record</button>
+      <button @click="precamera()">Prepare Camera</button>
+    
 
+    
+    <video class="player"></video>
+    
+  </div>
+</template>
 <script>
-import Uppy from '@uppy/core'
-import XHRUpload from '@uppy/xhr-upload'
-import Dashboard from '@uppy/dashboard'
-import Webcam from '@uppy/webcam'
+
+import RecordRTC from 'recordrtc'
+
 export default {
-  data() {
-    return {
-      uppyId: 'uppy-trigger'
+    data(){
+        blobdata:'';
+        video:'';
+        stream:'';
+        recorder:'';
+        blob:'';
+        file:'';
+        formData:'';
+        
+    },
+   
+    
+    methods:{
+
+    
+         async precamera(){
+             this.video=document.querySelector('.player');
+            this.stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+            this.recorder = new RecordRTC(this.stream, {type: 'video'});
+            this.video.srcObject=this.stream;
+            this.video.play();
+            
+            },
+
+
+
+       async startrecord(){
+            
+         await  this.recorder.startRecording();
+
+        },
+       async stoprecord(){
+            await this.recorder.stopRecording();
+            this.blob = await this.recorder.getBlob();
+            this.file=new File([this.blob], 'record.webm');
+            this.formData = new FormData();
+            this.formData.append('imgUploader', this.file);
+            fetch('http://localhost:5000/api/upload',{
+                mode:'no-cors',
+                method:'POST',
+               // headers: {"Content-Type": "multipart/form-data"},
+                body:this.formData
+            });
+
+           // this.video.pause();
+        this.stream.getTracks().forEach(track => track.stop())
+        
+        }
+  
+    
     }
-  },
-  mounted() {
-    const uppy = Uppy()
-      .use(Dashboard, {
-        trigger: '#select-files'
-      })
-      .use(Webcam, { target: Dashboard }) // ウェブカメラを追加
-      .use(XHRUpload, { endpoint: 'https://api2.transloadit.com' }) // ダミーのURLへアップロード
-    uppy.on('complete', result => {
-      // eslint-disable-next-line no-console
-      console.log(
-        'Upload complete! We’ve uploaded these files:',
-        result.successful
-      )
-    })
-  }
 }
+
+
 </script>
