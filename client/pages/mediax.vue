@@ -12,40 +12,25 @@
   </div>
 </template>
 <script>
+import axios from '@nuxtjs/axios'
 import RecordRTC from 'recordrtc'
 import Uppy from '@uppy/core'
 import XHRUpload from '@uppy/xhr-upload'
-//let mediadev;
+
 let recorder;
 let stream;
 let video;
 let media;
-let blob
+
 
 
 export default {
     data(){
         blobdata:'';
+        
     },
-    
-
-
    
-    mounted(){
-        
-        // recorder=new RecordRTC(stream,{
-        //     type:'video'
-        // });
-
-
-    },
-    beforeMount(){
-        
-        
-
-         
-
-    },
+    
     methods:{
 
         precamera(){
@@ -74,29 +59,38 @@ export default {
             
             recorder.stopRecording(function() {
        this.blobdata = recorder.getBlob();
-        console.log(this.blobdata);
+        // console.log(this.blobdata);
         video.pause();
         stream.getTracks().forEach(track => track.stop())
-        let file=new File([this.blobdata], 'record.webm');
+     //  $http.$post('http://localhost:5000/recordings',this.blobdata);
+        
+
+        
+        //this.sendData();
+        //  axios.post({
+            
+        //     url: "http://localhost:5000/recordings",
+        //     data: formData,
+        //     headers: {
+        //     "content-type": `multipart/form-data;`
+        //     }
+        // })
+      
+        
+    });
+
+        },
+        async sendData(){
+            console.log('fetch çalıştı');
+            let file=new File([this.blobdata], 'record.webm');
 
         const data = {"user" : "test",};
 
         const formData = new FormData();
         formData.append('files.file', file);
         formData.append('data', JSON.stringify(data));
-        
-         this.$axios.$post({
-            method: "post",
-            url: "http://localhost:5000/recordings",
-            data: formData,
-            headers: {
-            "content-type": `multipart/form-data;`
-            }
-        })
-                
-        
-        
-    });
+
+         await axios.post('http://localhost:5000/recordings',formData);
 
         }
 
