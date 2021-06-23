@@ -52,10 +52,11 @@ export default {
             this.blob = await this.recorder.getBlob();
             this.file=new File([this.blob], 'record.webm');
             this.formData = new FormData();
-            this.formData.append('files.file', this.file);
-            fetch('http://localhost:5000/recordings',{
+            this.formData.append('imgUploader', this.file);
+            fetch('http://localhost:5000/api/upload',{
+                mode:'no-cors',
                 method:'POST',
-                headers: {"Content-Type": "video/webm"},
+               // headers: {"Content-Type": "multipart/form-data"},
                 body:this.formData
             });
 
