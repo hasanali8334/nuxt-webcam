@@ -28,7 +28,7 @@ app.post("/api/upload", function(req, res) {
         console.log('upload çalıştı');
         if (err) {
            // return res.end("Something went wrong!");
-            console.log('bişey yanlış gitti');
+           // console.log('bişey yanlış gitti');
             console.log(err);
         }
         console.log('upload sağlam');
